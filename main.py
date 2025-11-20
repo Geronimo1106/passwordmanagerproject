@@ -16,6 +16,8 @@ def main():
         elif auswahl == "4":
             ui.eintrag_loeschen()
         elif auswahl == "5":
+            ui.passwortgenerieren()
+        elif auswahl == "6":
             print("Programm wird beendet.")
             break
         else:

@@ -1,5 +1,4 @@
-from jinja2.nodes import Break
-
+import password_generator
 from models import (
     get_all_entries,
     create_entry,
@@ -86,3 +85,7 @@ def eintrag_bearbeiten():
         eintrag["password"] = neu_pw
 
     print("Eintrag aktualisiert.")
+
+def passwortgenerieren():
+    passswort = password_generator.generate_password()
+    return passswort

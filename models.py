@@ -1,4 +1,3 @@
-import ui
 password_entries = []
 
 def create_entry(service, login, password):
