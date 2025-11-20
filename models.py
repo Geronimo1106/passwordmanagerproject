@@ -1,3 +1,4 @@
+import ui
 password_entries = []
 
 def create_entry(service, login, password):
@@ -18,3 +19,10 @@ def create_entry(service, login, password):
 
 def get_all_entries():
     return password_entries
+
+def delete_entry(entry_id):
+    for e in password_entries:
+        if e["id"] == entry_id:
+            password_entries.remove(e)
+            return True
+    return False
