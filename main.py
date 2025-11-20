@@ -1,16 +1,26 @@
-# This is a sample Python script.
+from models import PasswortEintrag
+import ui
 
-# Press Umschalt+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def main():
+    # Später hier: Login / Master-Passwort
+    eintraege: list[PasswortEintrag] = []
 
+    while True:
+        auswahl = ui.hauptmenue()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Strg+F8 to toggle the breakpoint.
+        if auswahl == "1":
+            ui.eintraege_anzeigen(eintraege)
+        elif auswahl == "2":
+            ui.eintrag_anlegen(eintraege)
+        elif auswahl == "3":
+            ui.eintrag_bearbeiten(eintraege)
+        elif auswahl == "4":
+            ui.eintrag_loeschen(eintraege)
+        elif auswahl == "5":
+            print("Programm wird beendet.")
+            break
+        else:
+            print("Ungültige Auswahl.")
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    main()
