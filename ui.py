@@ -13,7 +13,8 @@ def hauptmenue():
     print("2) Neuen Eintrag hinzufügen")
     print("3) Eintrag bearbeiten")
     print("4) Eintrag löschen")
-    print("5) Beenden")
+    print("5) Passwort generieren")
+    print("6) Beenden")
 
     auswahl = input("Auswahl: ").strip()
     return auswahl
@@ -34,7 +35,9 @@ def eintrag_anlegen():
     print("\n--- Eintrag Anlegen ---")
     service = input("Service: ")
     login = input("Login: ")
-    password = input("Password: ")
+    password = input("Password (Enter für generieren): ")
+    if password == "":
+        password = passwortgenerieren()
     create_entry(service, login, password)
     print("Eintrag angelegt.")
 
@@ -87,5 +90,15 @@ def eintrag_bearbeiten():
     print("Eintrag aktualisiert.")
 
 def passwortgenerieren():
-    passswort = password_generator.generate_password()
-    return passswort
+    print("\n--- Passwort generieren ---")
+    laenge = int(input("Laenge: "))
+    grossbuchstaben = input("Grossbuchstaben (j/n): ")
+    kleinbuchstaben = input("Kleinbuchstaben (j/n): ")
+    zahlen = input("Zahlen (j/n): ")
+    sonderzeichen = input("Sonderzeichen (j/n): ")
+    pw = password_generator.generate_password(laenge, grossbuchstaben, kleinbuchstaben, zahlen, sonderzeichen)
+    if not pw == None:
+        print(pw)
+    else:
+        print("\nLaenge muss mindestens 1 sein und es muss eine Zeichengruppe ausgewählt werden (Groß-/Kleinbuchstaben, Zahlen oder Sonderzeichen)")
+    return pw
