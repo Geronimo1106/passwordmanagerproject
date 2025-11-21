@@ -1,5 +1,6 @@
 import secrets
 import string
+#https://docs.python.org/3/library/secrets.html
 def generate_password(length, use_upper, use_lower, use_digits, use_symbols):
 
     charset = ""
