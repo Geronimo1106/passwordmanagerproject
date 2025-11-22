@@ -5,12 +5,12 @@ import sqlite3
 DB_FILE = "passwords.db"
 
 def connect():
-con = sqlite3.connect(DB_FILE)
-cur = con.cursor()
-cur.execute("""CREATE TABLE IF NOT EXISTS password_entries(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            service TEXT NOT NULL,
-            username TEXT NOT NULL,
-            password TEXT NOT NULL,
-            created_at TEXT NOT NULL,
-            updated_at TEXT NOT NULL)""")
+    con = sqlite3.connect(DB_FILE)
+    cur = con.cursor()
+    cur.execute("""CREATE TABLE IF NOT EXISTS password_entries(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                service TEXT NOT NULL,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL)""")
