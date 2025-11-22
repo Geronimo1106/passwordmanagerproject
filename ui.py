@@ -1,3 +1,4 @@
+import db
 import password_generator
 from models import (
     get_all_entries,
@@ -6,6 +7,7 @@ from models import (
     find_entry_by_id,
 )
 
+user = None
 
 def hauptmenue():
     print("\n--- Main Menu ---")
@@ -18,6 +20,12 @@ def hauptmenue():
 
     auswahl = input("Auswahl: ").strip()
     return auswahl
+
+def loginmenu():
+    print("--- Passwortmanager ---")
+    global user
+    user = input("Username: ")
+    input("Password: ")
 
 def eintraege_anzeigen():
     password_entries = get_all_entries()
@@ -38,7 +46,8 @@ def eintrag_anlegen():
     password = input("Password (Enter für generieren): ")
     if password == "":
         password = passwortgenerieren()
-    create_entry(service, login, password)
+#    create_entry(service, login, password)
+    db.insert(user, service, login, password)
     print("Eintrag angelegt.")
 
 def eintrag_loeschen():

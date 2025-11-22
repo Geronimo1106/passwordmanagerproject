@@ -1,9 +1,8 @@
 import ui
 
+
 def main():
-    print("--- Passwortmanager ---")
-    input("Username: ")
-    input("Password: ")
+    ui.loginmenu()
     while True:
         auswahl = ui.hauptmenue()
 
