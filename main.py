@@ -1,6 +1,7 @@
 import ui
 
 def main():
+    ui.loginmenu()
     while True:
         auswahl = ui.hauptmenue()
 
@@ -13,6 +14,8 @@ def main():
         elif auswahl == "4":
             ui.eintrag_loeschen()
         elif auswahl == "5":
+            ui.passwortgenerieren()
+        elif auswahl == "6":
             print("Programm wird beendet.")
             break
         else:
