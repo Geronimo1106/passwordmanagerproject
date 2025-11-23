@@ -1,6 +1,5 @@
 import ui
 
-
 def main():
     ui.loginmenu()
     while True:

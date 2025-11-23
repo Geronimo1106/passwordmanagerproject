@@ -1,5 +1,4 @@
 import sqlite3
-import string
 from datetime import datetime
 #https://docs.python.org/3/library/sqlite3.html
 #https://www.w3schools.com/sql/sql_autoincrement.asp
@@ -10,7 +9,6 @@ def connect(user):
     con.row_factory = sqlite3.Row
     cur = con.cursor()
     table = f"password_entries_{user}"
-    #cur.execute("""DROP TABLE password_entries_Gero""")
     cur.execute(f"""CREATE TABLE IF NOT EXISTS {table}(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 service TEXT NOT NULL,
