@@ -69,12 +69,12 @@ def eintrag_loeschen():
         return
     print("\n--- Eintrag Löschen ---")
     try:
-        eid = int(input("ID des zu löschenden Eintrags: "))
+        eid = input("ID des zu löschenden Eintrags: ")
     except ValueError:
         print("Ungültige Eingabe.")
         return
 
-    if delete_entry(eid):
+    if db.delete_entry(user, eid):
         print("Eintrag gelöscht.")
     else:
         print("Eintrag nicht gefunden.")
@@ -107,42 +107,6 @@ def eintrag_bearbeiten():
         print("\nEintrag erfolgreich aktualisiert.")
     else:
         print("\nFehler beim Aktualisieren.")
-
-"""
-def eintrag_bearbeiten():
-    if not eintraege_anzeigen():
-        return
-
-    print("\n--- Eintrag Bearbeiten ---")
-    try:
-        eid = int(input("ID des zu bearbeitenden Eintrags: "))
-    except ValueError:
-        print("Ungültige Eingabe.")
-        return
-
-    eintrag = db.get_entry_by_id(user, eid)
-    if eintrag is None:
-        print("Eintrag nicht gefunden.")
-        return
-
-    print(f"Service aktuell: {eintrag['service']}")
-    neu_service = input("Neuer Service (leer lassen zum Behalten): ").strip()
-    if neu_service:
-        eintrag["service"] = neu_service
-
-    print(f"Login aktuell: {eintrag['login']}")
-    neu_login = input("Neuer Login (leer lassen zum Behalten): ").strip()
-    if neu_login:
-        eintrag["login"] = neu_login
-
-    print(f"Passwort aktuell: {eintrag['password']}")
-    neu_pw = input("Neues Passwort (leer lassen zum Behalten): ").strip()
-    if neu_pw:
-        eintrag["password"] = neu_pw
-
-    print("Eintrag aktualisiert.")
-    
-"""
 
 def passwortgenerieren():
     print("\n--- Passwort generieren ---")

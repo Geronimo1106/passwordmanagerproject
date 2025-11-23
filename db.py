@@ -111,4 +111,21 @@ def update_entry(user, entry_id, service, login, password):
 
     con.commit()
     con.close()
-    return cur.rowcount > 0
+
+def delete_entry(user, entry_id):
+    con, cur, table = connect(user)
+    cur = con.cursor()
+
+    cur.execute(
+        f"""
+        DELETE FROM {table}
+        WHERE id = ?
+        """,
+        (entry_id)
+    )
+
+    con.commit()
+    deleted = cur.rowcount
+    con.close()
+
+    return deleted > 0
