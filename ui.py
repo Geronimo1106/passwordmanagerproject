@@ -1,11 +1,7 @@
+import db
 import password_generator
-from models import (
-    get_all_entries,
-    create_entry,
-    delete_entry,
-    find_entry_by_id,
-)
 
+user = None
 
 def hauptmenue():
     print("\n--- Main Menu ---")
@@ -19,17 +15,44 @@ def hauptmenue():
     auswahl = input("Auswahl: ").strip()
     return auswahl
 
+def loginmenu():
+    print("--- Passwortmanager ---")
+    global user
+    user = input("Username: ")
+    input("Password: ")
+
 def eintraege_anzeigen():
-    password_entries = get_all_entries()
+    passwort_eintraege = db.get_all_entries(user)
     print("\n--- Gespeicherte Einträge ---")
-    if not password_entries:
-        print("\nKeine Einträge vorhanden.")
+
+    if not passwort_eintraege:
+        print("Keine Einträge vorhanden.")
         return False
 
-    print("[ID] Service | Login | Passwort")
-    for e in password_entries:
-        print(f"[{e['id']}] {e['service']} | {e['login']} | {e['password']}")
+    print(f"{'ID':<4} {'Service':<20} {'Login':<20} {'Passwort'}")
+    print("-" * 70)
+
+    for e in passwort_eintraege:
+        print(f"{e['id']:<4} {e['service']:<20} {e['login']:<20} {e['password']}")
     return True
+
+def eintraege_filtern():
+    print("\n--- Gespeicherte Einträge ---")
+    feld = input("Suche nach (ID,Service,Login,Passwort): ")
+    wert = input("Suche: ")
+    passwort_eintraege = db.get_entry_by_field(user, feld, wert)
+
+    if not passwort_eintraege:
+        print("Keine Einträge vorhanden.")
+        return False
+
+    print(f"{'ID':<4} {'Service':<20} {'Login':<20} {'Passwort'}")
+    print("-" * 70)
+
+    for e in passwort_eintraege:
+        print(f"{e['id']:<4} {e['service']:<20} {e['login']:<20} {e['password']}")
+    return True
+
 
 def eintrag_anlegen():
     print("\n--- Eintrag Anlegen ---")
@@ -38,7 +61,7 @@ def eintrag_anlegen():
     password = input("Password (Enter für generieren): ")
     if password == "":
         password = passwortgenerieren()
-    create_entry(service, login, password)
+    db.insert(user, service, login, password)
     print("Eintrag angelegt.")
 
 def eintrag_loeschen():
@@ -46,12 +69,12 @@ def eintrag_loeschen():
         return
     print("\n--- Eintrag Löschen ---")
     try:
-        eid = int(input("ID des zu löschenden Eintrags: "))
+        eid = input("ID des zu löschenden Eintrags: ")
     except ValueError:
         print("Ungültige Eingabe.")
         return
 
-    if delete_entry(eid):
+    if db.delete_entry(user, eid):
         print("Eintrag gelöscht.")
     else:
         print("Eintrag nicht gefunden.")
@@ -60,34 +83,30 @@ def eintrag_bearbeiten():
     if not eintraege_anzeigen():
         return
 
-    print("\n--- Eintrag Bearbeiten ---")
-    try:
-        eid = int(input("ID des zu bearbeitenden Eintrags: "))
-    except ValueError:
-        print("Ungültige Eingabe.")
-        return
+    print("\n--- Eintrag bearbeiten ---")
+    entry_id = input("ID des Eintrags: ")
 
-    eintrag = find_entry_by_id(eid)
-    if eintrag is None:
+    entry = db.get_entry_by_id(user, entry_id)
+    if not entry:
         print("Eintrag nicht gefunden.")
-        return
+        return False
 
-    print(f"Service aktuell: {eintrag['service']}")
-    neu_service = input("Neuer Service (leer lassen zum Behalten): ").strip()
-    if neu_service:
-        eintrag["service"] = neu_service
+    print(f"\nAktuelle Werte:")
+    print(f"Service:  {entry['service']}")
+    print(f"Login:    {entry['login']}")
+    print(f"Passwort: {entry['password']}")
 
-    print(f"Login aktuell: {eintrag['login']}")
-    neu_login = input("Neuer Login (leer lassen zum Behalten): ").strip()
-    if neu_login:
-        eintrag["login"] = neu_login
+    print("\nNeue Werte (leer lassen = unverändert):")
+    new_service = input("Neuer Service: ").strip() or entry["service"]
+    new_login   = input("Neuer Login: ").strip() or entry["login"]
+    new_pw      = input("Neues Passwort: ").strip() or entry["password"]
 
-    print(f"Passwort aktuell: {eintrag['password']}")
-    neu_pw = input("Neues Passwort (leer lassen zum Behalten): ").strip()
-    if neu_pw:
-        eintrag["password"] = neu_pw
+    success = db.update_entry(user, entry_id, new_service, new_login, new_pw)
 
-    print("Eintrag aktualisiert.")
+    if success:
+        print("\nEintrag erfolgreich aktualisiert.")
+    else:
+        print("\nFehler beim Aktualisieren.")
 
 def passwortgenerieren():
     print("\n--- Passwort generieren ---")
