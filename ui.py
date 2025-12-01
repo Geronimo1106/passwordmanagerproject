@@ -1,27 +1,36 @@
 import db
 import password_generator
-
-user = None
+import users
 
 def hauptmenue():
     print("\n--- Main Menu ---")
     print("1) Alle Einträge anzeigen")
-    print("2) Neuen Eintrag hinzufügen")
-    print("3) Eintrag bearbeiten")
-    print("4) Eintrag löschen")
-    print("5) Passwort generieren")
-    print("6) Beenden")
+    print("2) Nach Einträgen suchen")
+    print("3) Neuen Eintrag hinzufügen")
+    print("4) Eintrag bearbeiten")
+    print("5) Eintrag löschen")
+    print("6) Passwort generieren")
+    print("7) Beenden")
 
     auswahl = input("Auswahl: ").strip()
     return auswahl
 
-def loginmenu():
-    print("--- Passwortmanager ---")
-    global user
-    user = input("Username: ")
-    input("Password: ")
 
-def eintraege_anzeigen():
+def loginmenu():
+    print("=== Login ===")
+    user = input("Benutzername: ").strip()
+
+    # 1) Falls Nutzer neu ist Masterpasswort anlegen
+    users.setup_master_password(user)
+
+    # 2) Passwort-Verifizierung
+    if not users.verify_master_password(user):
+        return None
+
+    return user
+
+
+def eintraege_anzeigen(user):
     passwort_eintraege = db.get_all_entries(user)
     print("\n--- Gespeicherte Einträge ---")
 
@@ -36,7 +45,7 @@ def eintraege_anzeigen():
         print(f"{e['id']:<4} {e['service']:<20} {e['login']:<20} {e['password']}")
     return True
 
-def eintraege_filtern():
+def eintraege_filtern(user):
     print("\n--- Gespeicherte Einträge ---")
     feld = input("Suche nach (ID,Service,Login,Passwort): ")
     wert = input("Suche: ")
@@ -54,7 +63,7 @@ def eintraege_filtern():
     return True
 
 
-def eintrag_anlegen():
+def eintrag_anlegen(user):
     print("\n--- Eintrag Anlegen ---")
     service = input("Service: ")
     login = input("Login: ")
@@ -64,8 +73,8 @@ def eintrag_anlegen():
     db.insert(user, service, login, password)
     print("Eintrag angelegt.")
 
-def eintrag_loeschen():
-    if not eintraege_anzeigen():
+def eintrag_loeschen(user):
+    if not eintraege_anzeigen(user):
         return
     print("\n--- Eintrag Löschen ---")
     try:
@@ -79,9 +88,9 @@ def eintrag_loeschen():
     else:
         print("Eintrag nicht gefunden.")
 
-def eintrag_bearbeiten():
-    if not eintraege_anzeigen():
-        return
+def eintrag_bearbeiten(user):
+    if not eintraege_anzeigen(user):
+        return None
 
     print("\n--- Eintrag bearbeiten ---")
     entry_id = input("ID des Eintrags: ")
@@ -110,14 +119,11 @@ def eintrag_bearbeiten():
 
 def passwortgenerieren():
     print("\n--- Passwort generieren ---")
-    laenge = int(input("Laenge: "))
+    laenge = input("Laenge: ")
     grossbuchstaben = input("Grossbuchstaben (j/n): ")
     kleinbuchstaben = input("Kleinbuchstaben (j/n): ")
     zahlen = input("Zahlen (j/n): ")
     sonderzeichen = input("Sonderzeichen (j/n): ")
     pw = password_generator.generate_password(laenge, grossbuchstaben, kleinbuchstaben, zahlen, sonderzeichen)
-    if not pw == None:
+    if not pw is None:
         print(pw)
-    else:
-        print("\nLaenge muss mindestens 1 sein und es muss eine Zeichengruppe ausgewählt werden (Groß-/Kleinbuchstaben, Zahlen oder Sonderzeichen)")
-    return pw

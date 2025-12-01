@@ -3,8 +3,9 @@ from datetime import datetime
 #https://docs.python.org/3/library/sqlite3.html
 #https://www.w3schools.com/sql/sql_autoincrement.asp
 password_entries = []
-DB_FILE = "passwords.db"
+
 def connect(user):
+    DB_FILE = f"{user}_passwords.db"
     con = sqlite3.connect(DB_FILE)
     con.row_factory = sqlite3.Row
     cur = con.cursor()
@@ -108,7 +109,9 @@ def update_entry(user, entry_id, service, login, password):
     )
 
     con.commit()
+    updated_rows = cur.rowcount
     con.close()
+    return updated_rows > 0
 
 def delete_entry(user, entry_id):
     con, cur, table = connect(user)
