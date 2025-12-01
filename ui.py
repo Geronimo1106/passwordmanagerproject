@@ -72,6 +72,11 @@ def eintrag_anlegen(user):
     password = input("Password (Enter für generieren): ")
     if password == "":
         password = passwortgenerieren()
+
+    if not password:
+        print("Fehler: Es wurde kein Passwort erzeugt.")
+        return
+
     db.insert(user, service, login, password)
     print("Eintrag angelegt.")
 
@@ -129,3 +134,4 @@ def passwortgenerieren():
     pw = password_generator.generate_password(laenge, grossbuchstaben, kleinbuchstaben, zahlen, sonderzeichen)
     if not pw is None:
         print(pw)
+    return pw
