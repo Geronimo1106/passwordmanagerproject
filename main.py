@@ -1,7 +1,7 @@
 import ui
 
 def main():
-    user = ui.loginmenu()
+    user = ui.loginmenue()
     if not user:
         return
 

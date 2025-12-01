@@ -16,7 +16,7 @@ def hauptmenue():
     return auswahl
 
 
-def loginmenu():
+def loginmenue():
     print("=== Login ===")
     user = input("Benutzername: ").strip()
 
@@ -47,10 +47,12 @@ def eintraege_anzeigen(user):
 
 def eintraege_filtern(user):
     print("\n--- Gespeicherte Einträge ---")
-    feld = input("Suche nach (ID,Service,Login,Passwort): ")
+    feld = input("Suche nach (id,service,login,password): ").strip()
+    if feld not in ("id", "service", "login", "password"):
+        print("Bitte einen der Attribute auswählen und Schreibweise beachten.")
+        return False
     wert = input("Suche: ")
     passwort_eintraege = db.get_entry_by_field(user, feld, wert)
-
     if not passwort_eintraege:
         print("Keine Einträge vorhanden.")
         return False
@@ -119,7 +121,7 @@ def eintrag_bearbeiten(user):
 
 def passwortgenerieren():
     print("\n--- Passwort generieren ---")
-    laenge = input("Laenge: ")
+    laenge = input("Laenge (min. 6): ")
     grossbuchstaben = input("Grossbuchstaben (j/n): ")
     kleinbuchstaben = input("Kleinbuchstaben (j/n): ")
     zahlen = input("Zahlen (j/n): ")
