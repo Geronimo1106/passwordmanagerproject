@@ -1,3 +1,5 @@
+#Prototyp, der die einträge in einer Liste gespeichert hat vor Db implementierung
+#nicht mehr in benutzung
 password_entries = []
 
 def create_entry(service, login, password):
