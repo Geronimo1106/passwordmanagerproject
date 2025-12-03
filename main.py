@@ -1,10 +1,15 @@
 import ui
 
 def main():
+    # Startet das Login-Menü und gibt den eingeloggten Benutzer zurück.
+    # Wenn kein Benutzer zurückgegeben wird (Login abgebrochen/fehlgeschlagen),
+    # wird das Programm direkt beendet.
     user = ui.loginmenue()
     if not user:
         return
 
+    # Hauptprogrammschleife – zeigt immer wieder das Hauptmenü an,
+    # bis der Nutzer das Programm beendet.
     while True:
         auswahl = ui.hauptmenue()
 
