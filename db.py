@@ -5,6 +5,12 @@ from datetime import datetime
 password_entries = []
 
 def connect(user):
+    """
+    Stellt eine Verbindung zur Benutzerdatenbank her.
+    Jede*r Benutzer*in erhält eine eigene DB, z.B. 'alice_passwords.db'.
+
+    Es wird automatisch eine Tabelle für den Benutzer angelegt, falls sie noch nicht existiert.
+    """
     DB_FILE = f"{user}_passwords.db"
     con = sqlite3.connect(DB_FILE)
     con.row_factory = sqlite3.Row
@@ -20,6 +26,10 @@ def connect(user):
     return con, cur, table
 
 def insert(user, service, login, password):
+    """
+    Legt einen neuen Eintrag in der Datenbank an.
+    created_at und updated_at werden automatisch gesetzt.
+    """
     now = datetime.now().isoformat()
     con, cur, table = connect(user)
     cur.execute(f"""INSERT INTO {table} (service, login, password, created_at, updated_at)
@@ -30,6 +40,9 @@ def insert(user, service, login, password):
     con.close()
 
 def get_all_entries(user):
+    """
+    Gibt alle Einträge eines Benutzers als Liste von Dicts zurück.
+    """
     con, cur, table = connect(user)
     password_entries.clear()
     cur.execute(f"SELECT * FROM {table}")
@@ -50,6 +63,10 @@ def get_all_entries(user):
 
 
 def get_entry_by_field(user, field, value):
+    """
+    Sucht Einträge anhand eines bestimmten Feldes.
+    Nur bestimmte Felder sind erlaubt, um SQL-Injections zu verhindern.
+    """
     con, cur, table = connect(user)
     password_entries.clear()
     allowed_fields = {"id", "service", "login", "password", "created_at", "updated_at"}
@@ -78,6 +95,10 @@ def get_entry_by_field(user, field, value):
     return [entry]
 
 def get_entry_by_id(user, entry_id):
+    """
+    Holt einen Eintrag anhand seiner ID.
+    Gibt ein Dict oder None zurück.
+    """
     con, cur, table = connect(user)
     cur.execute(
         f"SELECT id, service, login, password FROM {table} WHERE id = ?",
@@ -98,6 +119,10 @@ def get_entry_by_id(user, entry_id):
     return entry
 
 def update_entry(user, entry_id, service, login, password):
+    """
+    Aktualisiert einen Eintrag anhand seiner ID.
+    Gibt True zurück, wenn eine Zeile aktualisiert wurde.
+    """
     con, cur, table = connect(user)
     cur.execute(
         f"""
@@ -114,6 +139,10 @@ def update_entry(user, entry_id, service, login, password):
     return updated_rows > 0
 
 def delete_entry(user, entry_id):
+    """
+    Löscht einen Eintrag anhand seiner ID.
+    Gibt True zurück, wenn etwas gelöscht wurde.
+    """
     con, cur, table = connect(user)
     cur = con.cursor()
 
